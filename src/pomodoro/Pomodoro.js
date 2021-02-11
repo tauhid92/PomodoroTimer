@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import classNames from "../utils/class-names";
 import useInterval from "../utils/useInterval";
-import { minutesToDuration } from '../utils/duration';
-import { secondsToDuration } from '../utils/duration';
+// import { minutesToDuration } from '../utils/duration';
+// import { secondsToDuration } from '../utils/duration';
 import PlayStop from "./PlayStop";
 import BreakDuration from "./BreakDuration";
 import FocusDuration from "./FocusDuration";
+import SessionDisplay from "./SessionDisplay";
 
 function Pomodoro() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -123,33 +124,8 @@ function Pomodoro() {
         <BreakDuration breakDurationMinutes={breakDurationMinutes} decreaseBreakDuration={decreaseBreakDuration} increaseBreakDuration={increaseBreakDuration} />
       </div>
       <PlayStop playPause={playPause} classNames={classNames} isTimerRunning={isTimerRunning} stopButton={stopButton} />
-      <div style={activeSession ? {display: "block"} : {display: "none"}}>
-        <div className="row mb-2">
-          <div className="col">
-            <h2 data-testid="session-title">
-              {!onBreak ? "Focusing" : "On Break"} for {!onBreak ? minutesToDuration(initialDuration) : minutesToDuration(initialBreakDuration)} minutes
-          </h2>
-            <p className="lead" data-testid="session-sub-title">
-              {secondsToDuration((durationMinutes * 60) + durationSeconds)} remaining
-          </p>
-          {!isTimerRunning ? <h2>PAUSED</h2> : null}
-          </div>
-        </div>
-        <div className="row mb-2">
-          <div className="col">
-            <div className="progress" style={{ height: "20px" }}>
-              <div
-                className="progress-bar"
-                role="progressbar"
-                aria-valuemin="0"
-                aria-valuemax="100"
-                aria-valuenow={durationProgress}
-                style={{ width: `${durationProgress}%` }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <SessionDisplay activeSession={activeSession} isTimerRunning={isTimerRunning} durationProgress={durationProgress} onBreak={onBreak} initialDuration={initialDuration} initialBreakDuration={initialBreakDuration}
+    durationMinutes={durationMinutes} durationSeconds={durationSeconds}/>
     </div>
   );
 }
